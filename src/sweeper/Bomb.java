@@ -10,7 +10,9 @@ class Bomb {
 
     void start() {
         bombMap = new Matrix(Box.ZERO);
-        placeBomb();
+        for (int i = 0; i < totalBombs; i++) {
+            placeBomb();
+        }
     }
 
     Box get(Coordinate coordinate) {
@@ -18,6 +20,17 @@ class Bomb {
     }
 
     private void placeBomb() {
-        bombMap.set(new Coordinate(4, 4), Box.BOMB);
+        Coordinate coordinate = Ranges.getRandomeCoordinate();
+        bombMap.set(coordinate, Box.BOMB);
+        incNumbersAroundBomb(coordinate);
+    }
+
+    private void incNumbersAroundBomb(Coordinate coordinate) {
+        for (Coordinate around :
+                Ranges.getCoordinatesAround(coordinate)) {
+            if (Box.BOMB != bombMap.get(around)) {
+                bombMap.set(around, bombMap.get(around).getNextNumberBox());
+            }
+        }
     }
 }
