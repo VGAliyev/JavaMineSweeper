@@ -22,4 +22,12 @@ public class Game {
             return flag.get(coordinate);
         }
     }
+
+    public void pressLeftButton(Coordinate coordinate) {
+        flag.setOpenedToBox(coordinate);
+    }
+
+    public void pressRightButton(Coordinate coordinate) {
+        flag.toggleFlagedToBox(coordinate);
+    }
 }

@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Objects;
 import sweeper.Box;
 import sweeper.Coordinate;
@@ -38,6 +40,26 @@ public class JavaMineSweeper extends JFrame {
                 }
             }
         };
+
+        panel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                int x = e.getX() / IMAGE_SIZE;
+                int y = e.getY() / IMAGE_SIZE;
+                Coordinate coordinate = new Coordinate(x, y);
+                if (e.getButton() == MouseEvent.BUTTON1) {
+                    game.pressLeftButton(coordinate);
+                }
+                if (e.getButton() == MouseEvent.BUTTON3) {
+                    game.pressRightButton(coordinate);
+                }
+                if (e.getButton() == MouseEvent.BUTTON2) {
+                    game.start();
+                }
+                panel.repaint();
+            }
+        });
+
         panel.setPreferredSize(new Dimension(
                 Ranges.getSize().x * IMAGE_SIZE,
                 Ranges.getSize().y * IMAGE_SIZE));
@@ -47,11 +69,11 @@ public class JavaMineSweeper extends JFrame {
     private void initFrame() {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setTitle("Java Mine Sweeper");
-        setLocationRelativeTo(null);
         setResizable(false);
         setVisible(true);
-        setIconImage(getImage("icon"));
         pack();
+        setLocationRelativeTo(null);
+        setIconImage(getImage("icon"));
     }
 
     private void setImages() {
