@@ -2,11 +2,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Objects;
 import sweeper.Box;
+import sweeper.Coordinate;
+import sweeper.Ranges;
 
 public class JavaMineSweeper extends JFrame {
     private JPanel panel;
-    private final int COLS = 15;
-    private final int ROWS = 1;
+    private final int COLS = 9;
+    private final int ROWS = 9;
     private final int IMAGE_SIZE = 50;
 
     public static void main(String[] args) {
@@ -15,6 +17,7 @@ public class JavaMineSweeper extends JFrame {
     }
 
     private JavaMineSweeper() {
+        Ranges.setSize(new Coordinate(COLS, ROWS));
         setImages();
         initPanel();
         initFrame();
@@ -24,14 +27,16 @@ public class JavaMineSweeper extends JFrame {
         panel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
-                for (Box box : Box.values()) {
-                    g.drawImage((Image)box.image,
-                    box.ordinal() * IMAGE_SIZE, 0, this);
+                super.paintComponent(g);
+                for (Coordinate coordinate : Ranges.getAllCoordinate()) {
+                    g.drawImage((Image)Box.values()[(coordinate.x + coordinate.y) % Box.values().length].image,
+                            coordinate.x * IMAGE_SIZE, coordinate.y * IMAGE_SIZE, this);
                 }
             }
         };
         panel.setPreferredSize(new Dimension(
-                COLS * IMAGE_SIZE, ROWS * IMAGE_SIZE));
+                Ranges.getSize().x * IMAGE_SIZE,
+                Ranges.getSize().y * IMAGE_SIZE));
         add(panel);
     }
 
@@ -42,6 +47,7 @@ public class JavaMineSweeper extends JFrame {
         setLocationRelativeTo(null);
         setResizable(false);
         setVisible(true);
+        setIconImage(getImage("icon"));
     }
 
     private void setImages() {
