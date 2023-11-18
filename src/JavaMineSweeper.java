@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.util.Objects;
+import sweeper.Box;
 
 public class JavaMineSweeper extends JFrame {
     private JPanel panel;
@@ -14,6 +15,7 @@ public class JavaMineSweeper extends JFrame {
     }
 
     private JavaMineSweeper() {
+        setImages();
         initPanel();
         initFrame();
     }
@@ -22,7 +24,10 @@ public class JavaMineSweeper extends JFrame {
         panel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
-                g.drawImage(getImage("bomb"), 0, 0, this);
+                for (Box box : Box.values()) {
+                    g.drawImage((Image)box.image,
+                    box.ordinal() * IMAGE_SIZE, 0, this);
+                }
             }
         };
         panel.setPreferredSize(new Dimension(
@@ -39,8 +44,14 @@ public class JavaMineSweeper extends JFrame {
         setVisible(true);
     }
 
+    private void setImages() {
+        for (Box box : Box.values()) {
+            box.image = getImage(box.name().toLowerCase());
+        }
+    }
+
     private Image getImage(String name) {
-        String fileName = "img/" + name.toLowerCase() + ".png";
+        String fileName = "img/" + name + ".png";
         ImageIcon icon = new ImageIcon(Objects.requireNonNull(getClass().getResource(fileName)));
         return icon.getImage();
     }
